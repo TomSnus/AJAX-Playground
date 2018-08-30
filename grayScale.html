@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<canvas id="c" width="500" height="500" ></canvas>
+<script>
+    var canvasWidth = 500;
+    var canvasHeight = 500;
+
+    var c = document.querySelector("#c");
+    var ctx = c.getContext("2d");
+    var image = new Image();
+    var data = 'EyeOfTheWorld_Feature.jpg';
+
+        //drawing of the test image - img1
+    image.onload = function () {
+            //draw background image
+            ctx.drawImage(image, 0, 0);
+            makeGrayScale();
+
+
+
+    };
+    image.src = data;
+
+
+
+    function makePixelGrayScale(red, green, blue, alpha) {
+        var y = 0.3*red + 0.59*green +0.11*blue;
+        return {red:y, green:y, blue:y, alpha:y};
+    }
+    function makeGrayScale() {
+        var red, green, blue, alpha, pixel, grey;
+        var pixelData = ctx.getImageData(0,0,500,500);
+        var cntPixels = pixelData.data.length/4;
+        for(var i = 0; i < cntPixels; i++){
+            red = pixelData[i*4];
+            green = pixelData[i*4+1];
+            blue = pixelData[i*4+2];
+            alpha = pixelData[i*4+3];
+            pixel = makePixelGrayScale(red, green, blue, alpha);
+            grey = (red+green+blue)/3;
+            pixelData[i*4] = pixel.red;
+            pixelData[i*4+1] = pixel.green;
+            pixelData[i*4+2] = pixel.blue;
+            pixelData[i*4+3] = pixel.alpha;
+        }
+        ctx.putImageData(pixelData, 0,0);
+    }
+
+</script>
+</body>
+</html>
