@@ -12,11 +12,16 @@ function loadData() {
     $nytElem.text("");
 
     // load streetview
-    var gMapsUrl ='http://maps.googleapis.com/maps/api/streetview?size=600x400&location='
     var streetStr = $('#street').val();
     var cityStr = $('#city').val();
-    var address = streetStr + ',' + cityStr;
-    $body.append('<img class="bgimg" src="' + gMapsUrl + address +'">');
+    var address = streetStr + ', ' + cityStr;
+
+    $greeting.text('So, you want to live at ' + address + '?');
+
+
+    // load streetview
+    var streetviewUrl = 'http://maps.googleapis.com/maps/api/streetview?size=600x400&location=' + address + '';
+    $body.append('<img class="bgimg" src="' + streetviewUrl + '">');
     // YOUR CODE GOES HERE!
 
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -36,8 +41,31 @@ function loadData() {
             +'<p>'+article.snippet+ '</p>'
             +'</li>');
         }
+
+    }).error(function (e) {
+        $nytHeaderElem.text('Articles could not be loaded');
     });
 
+    //WIKI
+
+    var  wikiRequestTimeout = setTimeout(function () {
+        $wikiElem.text("failed request");
+    }, 8000);
+    var wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' +cityStr
+        +'&format=json&callback=wikiCallback';
+    $.ajax({
+        url: wikiURL,
+        dataType: "jsonop",
+        success: function (response) {
+            var articlelist = response[1];
+            for(var i = 0; i < articlelist.length; i++){
+                article = articlelist[i];
+                var url = 'http://en/wikipedia.org/wiki/'+ article;
+                $wikiElem.append('<li> <a href ="'+url+'">' + article + '</a></li>');
+            }
+            clearTimeout(wikiRequestTimeout);
+        }
+    });
     return false;
 };
 
