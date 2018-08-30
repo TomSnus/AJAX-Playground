@@ -55,7 +55,7 @@ function loadData() {
         +'&format=json&callback=wikiCallback';
     $.ajax({
         url: wikiURL,
-        dataType: "jsonop",
+        dataType: "jsonp",
         success: function (response) {
             var articlelist = response[1];
             for(var i = 0; i < articlelist.length; i++){
