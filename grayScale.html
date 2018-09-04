@@ -37,6 +37,7 @@
         var red, green, blue, alpha, pixel, grey;
         var pixelData = ctx.getImageData(0,0,500,500);
         var cntPixels = pixelData.data.length/4;
+        //change color
         for(var i = 0; i < cntPixels; i++){
             red = pixelData[i*4];
             green = pixelData[i*4+1];
